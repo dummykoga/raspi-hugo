@@ -1,3 +1,7 @@
 [submodule "themes/koga"]
 	path = themes/koga
 	url = https://github.com/yuk0ga/koga.git
+[submodule "public"]
+	path = public
+	url = https://github.com/dummykoga/dummykoga.github.io.git
+	branch = master
