@@ -1,0 +1,53 @@
+theme = "koga"
+baseURL = "https://example.com"
+languageCode = "en-us"
+title = ""
+MetaDataFormat = "toml"
+pygmentsCodeFences = true
+pygmentsUseClasses = true
+
+[taxonomies]
+    tag = "tags"
+    category = "categories"
+    archive = "archives"
+
+[params]
+    emailHash = "enter your email hash for gravatar"
+    fullName = "Yu Koga"
+
+    [params.social]
+      Github = "dummykoga"
+      Facebook = "your facebook username"
+      Twitter = "your twitter username"
+      Instagram = "your instagram username"
+
+[menu]
+
+  [[menu.main]]
+    name = "Home"
+    url = "/"
+    weight = 1
+
+  [[menu.main]]
+    identifier = "post"
+    name = "Posts"
+    url = "/post/"
+    weight = 2
+
+  [[menu.main]]
+    identifier = "categories"
+    name = "Categories"
+    url = "/categories/"
+    weight = 3
+
+  [[menu.main]]
+    identifier = "tags"
+    name = "Tags"
+    url = "/tags/"
+    weight = 4
+
+  [[menu.main]]
+    identifier = "archives"
+    name = "Archives"
+    url = "/archives/"
+    weight = 5

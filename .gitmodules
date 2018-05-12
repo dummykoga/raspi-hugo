@@ -1,0 +1,3 @@
+[submodule "themes/koga"]
+	path = themes/koga
+	url = https://github.com/yuk0ga/koga.git
