@@ -1,5 +1,5 @@
 theme = "koga"
-baseURL = "https://dummykoga.github.io"
+baseURL = "https://dummykoga.github.io/"
 languageCode = "en-us"
 title = ""
 MetaDataFormat = "toml"
