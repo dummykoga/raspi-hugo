@@ -52,6 +52,8 @@ else:
     # Download each post
     # Create temporary directory "downloaded"
     subprocess.call(['mkdir', download_dir])
+    print("Created temporary directory 'downloaded/'\n")
+
     for datum in post_data:
         request = service.files().get_media(fileId=datum[0])
         fh = open(download_dir + datum[1], 'w')
@@ -111,6 +113,8 @@ else:
         print()
         subprocess.call(['./deploy.sh'])
 
+        print("Website Updated!")
+
         # Tweet new article
         for new_file in new_files:
             postName = new_file[0:len(new_file)-3]
@@ -124,8 +128,8 @@ else:
             accessTokenSecret = 'HrVbgRJYZuTKQj2z6gXSsAXobjS67yv0OtK0xm58dkWdM'
 
             # api = Twython(apiKey,apiSecret,accessToken,accessTokenSecret)
-
             # api.update_status(status=tweetStr)
+            # print("Tweet posted!")
 
         connection = httplib.HTTPSConnection('api.pushed.co', 443)
         connection.connect()
@@ -139,11 +143,11 @@ else:
             }
         )
         result = json.loads(connection.getresponse().read())
-        print("\nnotification pushed")
+        print("\nNotification pushed!")
 
     else:
         print("\nNo change detected")
     
     # Delete directory "downloaded"
     subprocess.call(['rm', '-rf', 'downloaded'])
-
+    print("\nDeleted temporary directory 'downloaded'")
