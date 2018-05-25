@@ -91,6 +91,11 @@ else:
                 new_files.append(found_file)
             new_outputs += "\n"
 
+        for new_file in new_files:
+            new_output = "+ new file: " + new_file
+            print(new_output)
+            new_outputs += new_output
+        
         if deleted_found_files != -1:
             for found_file in deleted_found_files:
                 deleted_files.append(found_file)
@@ -103,20 +108,16 @@ else:
             deleted_outputs += deleted_output
                     
         # Run deploy.sh to update website 
+        print()
         subprocess.call(['./deploy.sh'])
 
         # Tweet new article
         for new_file in new_files:
-            new_output = "+ new file: " + new_file
-            print(new_output)
-            new_outputs += new_output
-
             postName = new_file[0:len(new_file)-3]
             blogUrl = "https://dummykoga.github.io/post/"
             tweetStr = "New Article Posted!\n" + blogUrl + postName
 
             # your twitter consumer and access information goes here
-            # note: these are garbage strings and won't work
             apiKey = '187pyRShtHu1JIbprKcGNZHrF'
             apiSecret = 'qqwNc2rDH6OEy7VNfXqIGT4yhakuVRN2rYxEYSAmFsBrimHLGS'
             accessToken = '998793059922931712-87TnX00CNTZcARhbBQH81if597fTQMK'
