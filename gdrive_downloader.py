@@ -109,11 +109,12 @@ else:
             print(deleted_output)
             deleted_outputs += deleted_output
                     
-        # Run deploy.sh to update website 
-        print()
+        # Run deploy.sh to update website
+        confirm = raw_input("\nPress Enter to continue:")
+        print(confirm)
         subprocess.call(['./deploy.sh'])
 
-        print("Website Updated!")
+        print("\nWebsite Updated!")
 
         # Tweet new article
         for new_file in new_files:
