@@ -5,6 +5,9 @@ from httplib2 import Http
 from oauth2client import file, client, tools
 import subprocess
 from re import findall
+import sys
+from twython import Twython
+import json,httplib
 
 base_dir = "ci/"
 # Setup the Drive v3 API
@@ -34,11 +37,11 @@ parent_folder = service.files().list(
 if not parent_folder:
     print('Parent folder not found.')
 else:
-    print('Parent Folder: ', end="")
+    print('Parent folder found: ', end="")
     for parent in parent_folder:
         print(parent['name'], end=" ")
         parent_folder_id = parent['id']
-        print('<' + parent_folder_id + '>')
+        print('<' + parent_folder_id + '>\n')
 
     # Create a list of posts
     post_list = service.files().list(
@@ -61,37 +64,85 @@ else:
 
     # Check for difference in files
     command = "diff " + download_dir + " " + post_dir
-    output, error = subprocess.Popen(command.split(), stdout = subprocess.PIPE, stderr = subprocess.PIPE).communicate()
+
+    output = ""
+    process = subprocess.Popen(command.split(), stdout = subprocess.PIPE)
+    for line in iter(process.stdout.readline, ''):
+        output += line
+    # output, error = subprocess.Popen(command.split(), stdout = subprocess.PIPE, stderr = subprocess.PIPE).communicate()
     
     regex_in_downloaded = "Only in " + download_dir + ": (.*)\s*"
     regex_in_posts = "Only in " + post_dir + ": (.*)\s*"
 
     new_found_files = findall(regex_in_downloaded, output)
     deleted_found_files = findall(regex_in_posts, output)
+    
+    new_outputs = ""
+    deleted_outputs = ""
 
     if output != "":
         
-        print("Change detected")
+        print("\nChange detected")
         subprocess.call(['cp', '-r', download_dir+".", post_dir]) 
-        print("Changes applied to " + post_dir)
+        print("Changes applied to " + post_dir + '\n')
 
         if new_found_files != -1:
             for found_file in new_found_files:
                 new_files.append(found_file)
-        for new_file in new_files:     
-            print("new file: " + new_file)
+            new_outputs += "\n"
 
         if deleted_found_files != -1:
             for found_file in deleted_found_files:
                 deleted_files.append(found_file)
+            deleted_outputs += "\n"
+
         for deleted_file in deleted_files:
             subprocess.call(['rm', post_dir+deleted_file])
-            print("deleted file: " + deleted_file)
-    
+            deleted_output = "- deleted file: " + deleted_file
+            print(deleted_output)
+            deleted_outputs += deleted_output
+                    
+        # Run deploy.sh to update website 
+        subprocess.call(['./deploy.sh'])
+
+        # Tweet new article
+        for new_file in new_files:
+            new_output = "+ new file: " + new_file
+            print(new_output)
+            new_outputs += new_output
+
+            postName = new_file[0:len(new_file)-3]
+            blogUrl = "https://dummykoga.github.io/post/"
+            tweetStr = "New Article Posted!\n" + blogUrl + postName
+
+            # your twitter consumer and access information goes here
+            # note: these are garbage strings and won't work
+            apiKey = '187pyRShtHu1JIbprKcGNZHrF'
+            apiSecret = 'qqwNc2rDH6OEy7VNfXqIGT4yhakuVRN2rYxEYSAmFsBrimHLGS'
+            accessToken = '998793059922931712-87TnX00CNTZcARhbBQH81if597fTQMK'
+            accessTokenSecret = 'HrVbgRJYZuTKQj2z6gXSsAXobjS67yv0OtK0xm58dkWdM'
+
+            # api = Twython(apiKey,apiSecret,accessToken,accessTokenSecret)
+
+            api.update_status(status=tweetStr)
+
+        connection = httplib.HTTPSConnection('api.pushed.co', 443)
+        connection.connect()
+        connection.request('POST', '/1/push', json.dumps({
+            "app_key": "MwN9OerBuXGTcspFjn7k",
+            "app_secret": "r475WFlMSc1yMZG92J1gzhck6sLaCRNdQPWezgPHT0ywWfevhp9nRhjZCPlJDQUH",
+            "target_type": "app",
+            "content": "Website updated." + new_outputs + deleted_outputs}),
+            {
+                "Content-Type": "application/json"
+            }
+        )
+        # result = json.loads(connection.getresponse().read())
+        # print("\nnotification pushed")
+
     else:
-        print("No change detected")
+        print("\nNo change detected")
     
     # Delete directory "downloaded"
     subprocess.call(['rm', '-rf', 'downloaded'])
 
-    # subprocess.call(['./sample.sh', '"yeah"'])
