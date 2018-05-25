@@ -138,8 +138,8 @@ else:
                 "Content-Type": "application/json"
             }
         )
-        # result = json.loads(connection.getresponse().read())
-        # print("\nnotification pushed")
+        result = json.loads(connection.getresponse().read())
+        print("\nnotification pushed")
 
     else:
         print("\nNo change detected")
