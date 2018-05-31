@@ -9,6 +9,11 @@ import sys
 from twython import Twython
 import json,httplib
 
+def delete_downloaded():
+    # Delete directory "downloaded"
+    subprocess.call(['rm', '-rf', 'downloaded'])
+    print("\nDeleted temporary directory 'downloaded'")
+
 base_dir = "ci/"
 # Setup the Drive v3 API
 SCOPES = 'https://www.googleapis.com/auth/drive.readonly'
@@ -110,6 +115,7 @@ else:
             deleted_outputs += deleted_output
                     
         # Run deploy.sh to update website
+        delete_downloaded()
         confirm = raw_input("\nPress Enter to continue:")
         print(confirm)
         subprocess.call(['./deploy.sh'])
@@ -148,7 +154,5 @@ else:
 
     else:
         print("\nNo change detected")
-    
-    # Delete directory "downloaded"
-    subprocess.call(['rm', '-rf', 'downloaded'])
-    print("\nDeleted temporary directory 'downloaded'")
+        delete_downloaded()    
+
