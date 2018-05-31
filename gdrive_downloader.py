@@ -136,7 +136,7 @@ else:
 
             api = Twython(apiKey,apiSecret,accessToken,accessTokenSecret)
             api.update_status(status=tweetStr)
-            print("Tweet posted!")
+            print("\nTweet posted!")
 
         connection = httplib.HTTPSConnection('api.pushed.co', 443)
         connection.connect()

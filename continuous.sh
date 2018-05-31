@@ -1,3 +1,3 @@
 #! /bin/bash
-watch -n 10 python gdrive_downloader.py
-
+#watch -n 60 python gdrive_downloader.py
+while true; do python gdrive_downloader.py; sleep 60; done
