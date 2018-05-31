@@ -128,9 +128,9 @@ else:
             accessToken = '998793059922931712-87TnX00CNTZcARhbBQH81if597fTQMK'
             accessTokenSecret = 'HrVbgRJYZuTKQj2z6gXSsAXobjS67yv0OtK0xm58dkWdM'
 
-            # api = Twython(apiKey,apiSecret,accessToken,accessTokenSecret)
-            # api.update_status(status=tweetStr)
-            # print("Tweet posted!")
+            api = Twython(apiKey,apiSecret,accessToken,accessTokenSecret)
+            api.update_status(status=tweetStr)
+            print("Tweet posted!")
 
         connection = httplib.HTTPSConnection('api.pushed.co', 443)
         connection.connect()
